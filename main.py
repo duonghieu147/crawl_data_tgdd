@@ -9,7 +9,7 @@ import txt
 import pandas as pd
 import numpy as np
 
-#Phan Tich lay data cua san pham
+#Phan Tich lay data cua san pham them item
 def Sort_data(r,item):
     soup = BeautifulSoup(r.content, "html.parser")
     title = soup.find('div', class_='rowtop')
@@ -28,8 +28,8 @@ def Sort_data(r,item):
         img=''
         #hisprice=''
     #hisprice = soup.find('span', class_='hisprice').text
-
-    if item ==1:
+    #Nếu item là latop
+    if item == 1:
         index_child = soup.find('ul', class_='parameter')
         cpu = index_child.findChildren('li')[0].text
         ram = index_child.findChildren('li')[1].text
@@ -65,6 +65,7 @@ def Sort_data(r,item):
         print(Thong_Tin_SP)
         df = pd.DataFrame(data=Thong_Tin_SP)
         df.to_csv("c:\\Users\\hieudv\\PycharmProjects\\crawl_data_tgdd\\latop.csv", header=True, index=False)
+    #Nếu item la dien thoai
     elif item == 2:
         index_child = soup.find('ul', class_='parameter')
         index_0 = index_child.findChildren('li')[0].text
@@ -99,10 +100,9 @@ def Sort_data(r,item):
             "Link Anh": img
         })
         print(Thong_Tin_SP)
-        df = pd.DataFrame(data=Thong_Tin_SP)
-        df.to_csv("c:\\Users\\hieudv\\PycharmProjects\\crawl_data_tgdd\\dienthoai.csv", header=True, index=False)
     else:
         return 0;
+    return Thong_Tin_SP
 
 
 
@@ -127,8 +127,8 @@ def getlinksp(base_url,url,item): #https://www.thegioididong.com,https://www.the
             data = base_url + link
             print("Downloading %s" % data)
             r = requests.get(data)
+            Sort_data(r, item)
             #print(r)
-            Sort_data(r,item)
             count= count + 1
             if data:
                 # txt.dump(data, outfile)
@@ -141,7 +141,11 @@ def getlinksp(base_url,url,item): #https://www.thegioididong.com,https://www.the
 laptop=getlinksp('https://www.thegioididong.com','https://www.thegioididong.com/laptop',1)
 #Get Data dien thoai di dong
 dt=getlinksp('https://www.thegioididong.com','https://www.thegioididong.com/dtdd#i:3',2)#1=28 ,2,3
-#
+splist = Sort_data(r, item)
+df = pd.DataFrame(data=splist)
+df.to_csv("c:\\Users\\hieudv\\PycharmProjects\\crawl_data_tgdd\\dienthoai.csv", header=True, index=False)
+
+#Test tren 1 link san pham
 # r = requests.get("https://www.thegioididong.com/laptop/hp-348-g7-i3-1a0z1pa")
 # # print(r)
 # Sort_data(r)
