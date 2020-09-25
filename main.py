@@ -1,5 +1,4 @@
 import string
-
 from bs4 import BeautifulSoup
 from selectorlib import Extractor
 from PIL import Image, ImageDraw, ImageFont
@@ -7,6 +6,8 @@ from time import sleep
 import requests
 import json
 import txt
+import pandas as pd
+import numpy as np
 
 #Phan Tich lay data cua san pham
 def Sort_data(r,item):
@@ -62,6 +63,8 @@ def Sort_data(r,item):
             "Link Anh": img
         })
         print(Thong_Tin_SP)
+        df = pd.DataFrame(data=Thong_Tin_SP)
+        df.to_csv("c:\\Users\\hieudv\\PycharmProjects\\crawl_data_tgdd\\latop.csv", header=True, index=False)
     elif item == 2:
         index_child = soup.find('ul', class_='parameter')
         index_0 = index_child.findChildren('li')[0].text
@@ -96,8 +99,10 @@ def Sort_data(r,item):
             "Link Anh": img
         })
         print(Thong_Tin_SP)
+        df = pd.DataFrame(data=Thong_Tin_SP)
+        df.to_csv("c:\\Users\\hieudv\\PycharmProjects\\crawl_data_tgdd\\dienthoai.csv", header=True, index=False)
     else:
-        return 0
+        return 0;
 
 
 
