@@ -9,7 +9,7 @@ import json
 import txt
 
 #Phan Tich lay data cua san pham
-def Sort_data(r):
+def Sort_data(r,item):
     soup = BeautifulSoup(r.content, "html.parser")
     title = soup.find('div', class_='rowtop')
     area_price = soup.find('div', class_='area_price')
@@ -26,41 +26,78 @@ def Sort_data(r):
         area_price=''
         img=''
         #hisprice=''
-    #area_price = soup.find('div', class_='area_price').find('strong').text
     #hisprice = soup.find('span', class_='hisprice').text
-    #img = soup.find('div', class_='icon-position').find('img').attrs['src']
-    # cpu = soup.find('li', class_='p224582 g92_94_93').find('div').text
-    # ram = soup.find('li', class_='p224582 g146_149_155').find('div').text
-    # disk = soup.find('li', class_='p224582 g184').find('div').text
-    # man_hinh = soup.find('li', class_='p224582 g187_189').find('div').text
-    # card_mh = soup.find('li', class_='p224582 g193_191').find('div').text
-    # cong_kn = soup.find('li', class_='p224582 g200').find('div').text
-    # os = soup.find('li', class_='p224582 g8599').find('div').text
-    # thiet_ke = soup.find('li', class_='p224582 g7903_11082').find('div').text
-    # kich_thuoc = soup.find('li', class_='p224582 g254_255').find('div').text
-    # time_of_issue = soup.find('li', class_='p224582 g22711').find('div').text
-    Thong_so_kt = []
-    Thong_Tin_SP = []
-    Thong_so_kt.append({
-        # "CPU": cpu,
-        # "RAM": ram,
-        # "DISK": disk,
-        # "Man Hinh": man_hinh,
-        # "Card Man Hinh": card_mh,
-        # "Cong ket Noi": cong_kn,
-        # "HDH": os,
-        # "Thiet Ke": thiet_ke,
-        # "kich Thuoc": kich_thuoc,
-        # "Thoi Gian Ra Mat": time_of_issue
-    })
-    Thong_Tin_SP.append({
-        "Ten San Pham": title,
-        "Gia Sale": area_price,
-        #"Gia Goc": hisprice,
-        #"Thong So KT": Thong_so_kt,
-        "Link Anh": img
-    })
-    print(Thong_Tin_SP)
+
+    if item ==1:
+        index_child = soup.find('ul', class_='parameter')
+        cpu = index_child.findChildren('li')[0].text
+        ram = index_child.findChildren('li')[1].text
+        disk = index_child.findChildren('li')[2].text
+        man_hinh = index_child.findChildren('li')[3].text
+        card_mh = index_child.findChildren('li')[4].text
+        cong_kn = index_child.findChildren('li')[5].text
+        os = index_child.findChildren('li')[6].text
+        thiet_ke = index_child.findChildren('li')[7].text
+        kich_thuoc = index_child.findChildren('li')[8].text
+        time_of_issue = index_child.findChildren('li')[9].text
+        Thong_so_kt = []
+        Thong_Tin_SP = []
+        Thong_so_kt.append({
+            "CPU": cpu,
+            "RAM": ram,
+            "DISK": disk,
+            "Man Hinh": man_hinh,
+            "Card Man Hinh": card_mh,
+            "Cong ket Noi": cong_kn,
+            "HDH": os,
+            "Thiet Ke": thiet_ke,
+            "kich Thuoc": kich_thuoc,
+            "Thoi Gian Ra Mat": time_of_issue
+        })
+        Thong_Tin_SP.append({
+            "Ten San Pham": title,
+            "Gia Sale": area_price,
+            # "Gia Goc": hisprice,
+            "Thong So KT": Thong_so_kt,
+            "Link Anh": img
+        })
+        print(Thong_Tin_SP)
+    elif item == 2:
+        index_child = soup.find('ul', class_='parameter')
+        index_0 = index_child.findChildren('li')[0].text
+        index_1 = index_child.findChildren('li')[1].text
+        index_2 = index_child.findChildren('li')[2].text
+        index_3 = index_child.findChildren('li')[3].text
+        index_4 = index_child.findChildren('li')[4].text
+        index_5 = index_child.findChildren('li')[5].text
+        index_6 = index_child.findChildren('li')[6].text
+        index_7 = index_child.findChildren('li')[7].text
+        index_8 = index_child.findChildren('li')[8].text
+        #index_9 = index_child.findChildren('li')[9].text
+        Thong_so_kt = []
+        Thong_Tin_SP = []
+        Thong_so_kt.append({
+            index_0,
+            index_1,
+            index_2,
+            index_3,
+            index_4,
+            index_5,
+            index_6,
+            index_7,
+            index_8,
+            #index_9
+        })
+        Thong_Tin_SP.append({
+            "Ten San Pham": title,
+            "Gia Sale": area_price,
+            # "Gia Goc": hisprice,
+            "Thong So KT": Thong_so_kt,
+            "Link Anh": img
+        })
+        print(Thong_Tin_SP)
+    else:
+        return 0
 
 
 
@@ -68,8 +105,7 @@ def Sort_data(r):
 
 
 
-
-def getlinksp(base_url,url):#https://www.thegioididong.com,https://www.thegioididong.com/laptop
+def getlinksp(base_url,url,item): #https://www.thegioididong.com,https://www.thegioididong.com/laptop
     #req HTTP toi trang web
     response = requests.get(url)
     #resp chuan hoa html
@@ -87,20 +123,19 @@ def getlinksp(base_url,url):#https://www.thegioididong.com,https://www.thegioidi
             print("Downloading %s" % data)
             r = requests.get(data)
             #print(r)
-            Sort_data(r)
+            Sort_data(r,item)
             count= count + 1
             if data:
                 # txt.dump(data, outfile)
                 outfile.write(data)
                 outfile.write("\n")
                 # sleep(5)
-
                 print(count)
 
 #get data laptop
-#laptop=getlinksp('https://www.thegioididong.com','https://www.thegioididong.com/laptop')
+laptop=getlinksp('https://www.thegioididong.com','https://www.thegioididong.com/laptop',1)
 #Get Data dien thoai di dong
-dt=getlinksp('https://www.thegioididong.com','https://www.thegioididong.com/dtdd#i:3')#1=28 ,2,3
+dt=getlinksp('https://www.thegioididong.com','https://www.thegioididong.com/dtdd#i:3',2)#1=28 ,2,3
 #
 # r = requests.get("https://www.thegioididong.com/laptop/hp-348-g7-i3-1a0z1pa")
 # # print(r)
